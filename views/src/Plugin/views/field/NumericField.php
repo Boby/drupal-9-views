@@ -170,13 +170,16 @@ class NumericField extends FieldPluginBase {
     }
 
     // Use round first to avoid negative zeros.
-    $value = round($value, $precision);
+    if (is_numeric($value)) {
+      $value = round($value, $precision);
+    }
     // Test against both integer zero and float zero.
     if ($this->options['empty_zero'] && ($value === 0 || $value === 0.0)) {
       return '';
     }
-
-    $value = number_format($value, $precision, $this->options['decimal'], $this->options['separator']);
+    if (is_numeric($value)) {
+      $value = number_format($value, $precision, $this->options['decimal'], $this->options['separator']);
+    }
 
     // If we should format as plural, take the (possibly) translated plural
     // setting and format with the current language.
